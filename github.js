@@ -798,6 +798,39 @@
       };
     };
 
+    // Milestone API
+    // ==========
+
+    Github.Milestone = function(options) {
+      var path = "/repos/" + options.user + "/" + options.repo + "/milestones";
+
+      this.list = function(options, cb) {
+        var query = [];
+        for (var key in options) {
+          if (options.hasOwnProperty(key)) {
+            query.push(encodeURIComponent(key) + "=" + encodeURIComponent(options[key]));
+          }
+        }
+        _requestAllPages(path + '?' + query.join("&"), cb);
+      };
+
+      this.get = function(n, options, cb) {
+        _request("GET", path + "/" + n, null, cb);
+      };
+
+      this.create = function(options, cb){
+        _request("POST", path, options, cb);
+      };
+
+      this.update = function(n, options, cb){
+        _request("PATCH", path + '/' + n, options, cb);
+      };
+
+      this.delete = function(n, options, cb){
+        _request("DELETE", path + '/' + n, options, cb);
+      };
+    };
+
     // Top Level API
     // -------
 
@@ -815,6 +848,10 @@
 
     this.getGist = function(id) {
       return new Github.Gist({id: id});
+    };
+
+    this.getMilestone = function(user, repo) {
+      return new Github.Milestone({user: user, repo: repo});
     };
   };
 
