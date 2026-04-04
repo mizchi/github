@@ -38,12 +38,25 @@ fn base_headers(token : String) -> Map[String, String] {
   hdrs
 }
 
-///| Check response and raise on error. Returns nothing — caller reads body after this.
+///| Response with headers, for pagination/rate-limit inspection.
+pub struct ApiResponse {
+  json : Json
+  status : Int
+  headers : Map[String, String]
+} derive(Show)
+
+///| Check response and raise on error.
 async fn GitHubClient::check(
   self : GitHubClient,
   conn : @http.Client,
   response : @http.Response,
 ) -> Unit {
+  // Rate limit: 429 or 403 with retry-after
+  if response.code == 429 || (response.code == 403 && response.headers.contains("retry-after")) {
+    let body = conn.read_all()
+    self.conn = None
+    raise RateLimitError(response.code, body.text())
+  }
   guard response.code >= 200 && response.code < 300 else {
     let body = conn.read_all()
     self.conn = None
@@ -57,6 +70,18 @@ pub async fn GitHubClient::get_json(self : GitHubClient, path : String) -> Json 
   let response = conn.get(path)
   self.check(conn, response)
   conn.read_all().json()
+}
+
+///| GET → JSON with full response (headers for pagination/rate-limit).
+pub async fn GitHubClient::get_response(
+  self : GitHubClient,
+  path : String,
+) -> ApiResponse {
+  let conn = self.fresh_conn()
+  let response = conn.get(path)
+  self.check(conn, response)
+  let json = conn.read_all().json()
+  { json, status: response.code, headers: response.headers }
 }
 
 ///| GET → raw bytes
@@ -78,6 +103,22 @@ pub async fn GitHubClient::post_json(
 ) -> Json {
   let conn = self.fresh_conn()
   let response = conn.post(path, body)
+  self.check(conn, response)
+  conn.read_all().json()
+}
+
+///| POST with raw bytes body → JSON response (for asset upload).
+pub async fn GitHubClient::post_binary(
+  self : GitHubClient,
+  url : String,
+  data : Bytes,
+  content_type : String,
+) -> Json {
+  let conn = self.fresh_conn()
+  let hdrs : Map[String, String] = { "Content-Type": content_type }
+  conn.request(@http.Post, url, extra_headers=hdrs)
+  conn.write(data)
+  let response = conn.end_request()
   self.check(conn, response)
   conn.read_all().json()
 }
@@ -133,4 +174,9 @@ pub fn GitHubClient::close(self : GitHubClient) -> Unit {
 ///|
 pub suberror GitHubApiError {
   GitHubApiError(Int, String)
+} derive(Show, ToJson)
+
+///|
+pub suberror RateLimitError {
+  RateLimitError(Int, String)
 } derive(Show, ToJson)

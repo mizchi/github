@@ -12,16 +12,6 @@ async fn main {
     e => println("Error: \{e}")
   }
 
-  println("\n=== Branches ===")
-  try {
-    let branches = @repos.list_branches(client, "mizchi", "flaker")
-    for b in branches {
-      println("  - \{b.name}")
-    }
-  } catch {
-    e => println("Error: \{e}")
-  }
-
   println("\n=== Issues ===")
   try {
     let issues = @issues.list(client, "mizchi", "flaker", per_page=3)
@@ -46,17 +36,13 @@ async fn main {
   try {
     let results = @search.issues(client, "repo:mizchi/flaker is:open")
     println("Found: \{results.total_count}")
-    for item in results.items {
-      println("  #\{item.number}: \{item.title}")
-    }
   } catch {
     e => println("Error: \{e}")
   }
 
-  println("\n=== Check Runs (HEAD) ===")
+  println("\n=== Check Runs (main) ===")
   try {
     let checks = @checks.list_for_ref(client, "mizchi", "flaker", "main", per_page=5)
-    println("Total: \{checks.total_count}")
     for cr in checks.check_runs {
       let conclusion = cr.conclusion.unwrap_or("pending")
       println("  [\{conclusion}] \{cr.name}")
@@ -65,10 +51,27 @@ async fn main {
     e => println("Error: \{e}")
   }
 
-  println("\n=== Commit Status (HEAD) ===")
+  println("\n=== Compare (HEAD~3...HEAD) ===")
   try {
-    let status = @statuses.get_combined(client, "mizchi", "flaker", "main")
-    println("State: \{status.state}, checks: \{status.total_count}")
+    let cmp = @repos.compare(client, "mizchi", "flaker", "HEAD~3", "HEAD")
+    println("Status: \{cmp.status}, commits: \{cmp.total_commits}, files: \{cmp.files.length()}")
+  } catch {
+    e => println("Error: \{e}")
+  }
+
+  println("\n=== Pagination (branches, all pages) ===")
+  try {
+    let all = client.get_all_pages(
+      "/repos/mizchi/flaker/branches?per_page=3",
+      fn(json) {
+        match json.as_array() {
+          Some(arr) => arr
+          None => []
+        }
+      },
+      max_pages=5,
+    )
+    println("Total branches via pagination: \{all.length()}")
   } catch {
     e => println("Error: \{e}")
   }

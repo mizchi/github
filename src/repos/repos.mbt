@@ -101,6 +101,55 @@ pub async fn get_latest_release(
   @json.from_json(json)
 }
 
+///| Create a release.
+pub async fn create_release(
+  client : @client.GitHubClient,
+  owner : String,
+  repo : String,
+  tag_name : String,
+  name? : String,
+  body? : String,
+  draft? : Bool,
+  prerelease? : Bool,
+) -> Release {
+  let obj : Map[String, Json] = { "tag_name": tag_name.to_json() }
+  match name { Some(n) => obj.set("name", n.to_json()); None => () }
+  match body { Some(b) => obj.set("body", b.to_json()); None => () }
+  match draft { Some(d) => obj.set("draft", d.to_json()); None => () }
+  match prerelease { Some(p) => obj.set("prerelease", p.to_json()); None => () }
+  let json = client.post_json("/repos/\{owner}/\{repo}/releases", obj.to_json())
+  @json.from_json(json)
+}
+
+///| A file changed in a comparison.
+pub struct CompareFile {
+  filename : String
+  status : String
+  additions : Int
+  deletions : Int
+} derive(Show, Eq, FromJson, ToJson)
+
+///| Comparison between two refs.
+pub struct Comparison {
+  status : String
+  ahead_by : Int
+  behind_by : Int
+  total_commits : Int
+  files : Array[CompareFile]
+} derive(Show, Eq, FromJson, ToJson)
+
+///| Compare two commits/branches/tags.
+pub async fn compare(
+  client : @client.GitHubClient,
+  owner : String,
+  repo : String,
+  base : String,
+  head : String,
+) -> Comparison {
+  let json = client.get_json("/repos/\{owner}/\{repo}/compare/\{base}...\{head}")
+  @json.from_json(json)
+}
+
 ///| List branches.
 pub async fn list_branches(
   client : @client.GitHubClient,
