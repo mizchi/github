@@ -1,6 +1,6 @@
 ///| A workflow run from GitHub Actions.
 pub struct WorkflowRun {
-  id : Int
+  id : Double
   head_branch : String
   head_sha : String
   event : String
@@ -18,7 +18,7 @@ pub struct ListWorkflowRunsResponse {
 
 ///| An artifact from a workflow run.
 pub struct Artifact {
-  id : Int
+  id : Double
   name : String
   expired : Bool
 } derive(Show, Eq, FromJson, ToJson)

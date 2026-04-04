@@ -1,0 +1,15 @@
+import {
+  "mizchi/github/client",
+  "mizchi/github/repos",
+  "mizchi/github/issues",
+  "mizchi/github/actions",
+  "mizchi/github/users",
+  "moonbitlang/async",
+  "moonbitlang/core/env",
+}
+
+supported_targets = "+native"
+
+options(
+  "is-main": true,
+)

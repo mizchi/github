@@ -1,10 +1,8 @@
 ///| Repository information.
 pub struct Repository {
-  id : Int
+  id : Double
   name : String
   full_name : String
-  description : String
-  private_ : Bool
   default_branch : String
   html_url : String
   clone_url : String
@@ -72,7 +70,7 @@ pub async fn list_tags(
 
 ///| A release.
 pub struct Release {
-  id : Int
+  id : Double
   tag_name : String
   name : String?
   body : String?

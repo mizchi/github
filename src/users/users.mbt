@@ -1,6 +1,6 @@
 ///| Authenticated user or public user profile.
 pub struct User {
-  id : Int
+  id : Double
   login : String
   name : String?
   email : String?

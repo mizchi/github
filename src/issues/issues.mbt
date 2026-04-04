@@ -1,6 +1,6 @@
 ///| An issue.
 pub struct Issue {
-  id : Int
+  id : Double
   number : Int
   title : String
   body : String?
@@ -84,7 +84,7 @@ pub async fn add_labels(
 
 ///| Issue comment.
 pub struct Comment {
-  id : Int
+  id : Double
   body : String
   html_url : String
 } derive(Show, Eq, FromJson, ToJson)

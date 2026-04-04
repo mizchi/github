@@ -1,6 +1,6 @@
 ///| A pull request.
 pub struct PullRequest {
-  id : Int
+  id : Double
   number : Int
   title : String
   body : String?
@@ -83,7 +83,7 @@ pub async fn update(
 
 ///| A review on a pull request.
 pub struct Review {
-  id : Int
+  id : Double
   state : String
   body : String?
 } derive(Show, Eq, FromJson, ToJson)
