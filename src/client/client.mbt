@@ -6,8 +6,12 @@ pub struct GitHubClient {
 }
 
 ///|
-pub fn GitHubClient::new(token : String) -> GitHubClient {
-  { token, base_url: "https://api.github.com", conn: None }
+pub fn GitHubClient::new(token : String, base_url? : String) -> GitHubClient {
+  {
+    token,
+    base_url: base_url.unwrap_or("https://api.github.com"),
+    conn: None,
+  }
 }
 
 ///|
