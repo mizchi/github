@@ -52,6 +52,36 @@ pub async fn create(
   @json.from_json(json)
 }
 
+///| Update an issue (title, body, state).
+pub async fn update(
+  client : @client.GitHubClient,
+  owner : String,
+  repo : String,
+  number : Int,
+  title? : String,
+  body? : String,
+  state? : String,
+) -> Issue {
+  let obj : Map[String, Json] = {}
+  match title { Some(t) => obj.set("title", t.to_json()); None => () }
+  match body { Some(b) => obj.set("body", b.to_json()); None => () }
+  match state { Some(s) => obj.set("state", s.to_json()); None => () }
+  let json = client.patch_json("/repos/\{owner}/\{repo}/issues/\{number}", obj.to_json())
+  @json.from_json(json)
+}
+
+///| Add labels to an issue.
+pub async fn add_labels(
+  client : @client.GitHubClient,
+  owner : String,
+  repo : String,
+  number : Int,
+  labels : Array[String],
+) -> Json {
+  let obj : Map[String, Json] = { "labels": labels.to_json() }
+  client.post_json("/repos/\{owner}/\{repo}/issues/\{number}/labels", obj.to_json())
+}
+
 ///| Issue comment.
 pub struct Comment {
   id : Int

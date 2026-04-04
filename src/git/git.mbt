@@ -53,6 +53,32 @@ pub async fn get_ref(
   @json.from_json(json)
 }
 
+///| Create a reference (e.g. "refs/heads/new-branch").
+pub async fn create_ref(
+  client : @client.GitHubClient,
+  owner : String,
+  repo : String,
+  ref_ : String,
+  sha : String,
+) -> Ref {
+  let obj : Map[String, Json] = {
+    "ref": ref_.to_json(),
+    "sha": sha.to_json(),
+  }
+  let json = client.post_json("/repos/\{owner}/\{repo}/git/refs", obj.to_json())
+  @json.from_json(json)
+}
+
+///| Delete a reference (e.g. "heads/branch-name").
+pub async fn delete_ref(
+  client : @client.GitHubClient,
+  owner : String,
+  repo : String,
+  ref_ : String,
+) -> Unit {
+  let _ = client.delete("/repos/\{owner}/\{repo}/git/refs/\{ref_}")
+}
+
 ///| A git commit.
 pub struct Commit {
   sha : String
