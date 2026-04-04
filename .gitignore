@@ -1,3 +1,4 @@
+.mooncakes/
+_build/
+target/
 .DS_Store
-node_modules/
-npm-debug.log
