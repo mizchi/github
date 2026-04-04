@@ -4,6 +4,9 @@ import {
   "mizchi/github/issues",
   "mizchi/github/actions",
   "mizchi/github/users",
+  "mizchi/github/search",
+  "mizchi/github/checks",
+  "mizchi/github/statuses",
   "moonbitlang/async",
   "moonbitlang/core/env",
 }
