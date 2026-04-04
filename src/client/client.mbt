@@ -84,13 +84,27 @@ pub async fn GitHubClient::get_response(
   { json, status: response.code, headers: response.headers }
 }
 
-///| GET → raw bytes
+///| GET → raw bytes (follows 302 redirects for artifact download).
 pub async fn GitHubClient::get_binary(
   self : GitHubClient,
   path : String,
 ) -> Bytes {
   let conn = self.fresh_conn()
   let response = conn.get(path)
+  // Follow redirect
+  if response.code == 302 {
+    match response.headers.get("location") {
+      Some(url) => {
+        conn.skip_response_body()
+        let (resp, body) = @http.get(url)
+        guard resp.code >= 200 && resp.code < 300 else {
+          raise GitHubApiError(resp.code, "redirect failed")
+        }
+        return body.binary()
+      }
+      None => raise GitHubApiError(302, "redirect without location")
+    }
+  }
   self.check(conn, response)
   conn.read_all().binary()
 }
