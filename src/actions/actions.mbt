@@ -26,9 +26,10 @@ pub async fn list_artifacts(
   client : @client.GitHubClient,
   owner : String,
   repo : String,
-  run_id : Int,
+  run_id : Double,
 ) -> ListArtifactsResponse raise {
-  let path = "/repos/\{owner}/\{repo}/actions/runs/\{run_id}/artifacts"
+  let id = run_id.to_int64()
+  let path = "/repos/\{owner}/\{repo}/actions/runs/\{id}/artifacts"
   let json = client.get_json(path)
   @json.from_json(json)
 }
@@ -38,7 +39,8 @@ pub async fn download_artifact(
   client : @client.GitHubClient,
   owner : String,
   repo : String,
-  artifact_id : Int,
+  artifact_id : Double,
 ) -> Bytes {
-  client.get_binary("/repos/\{owner}/\{repo}/actions/artifacts/\{artifact_id}/zip")
+  let id = artifact_id.to_int64()
+  client.get_binary("/repos/\{owner}/\{repo}/actions/artifacts/\{id}/zip")
 }
