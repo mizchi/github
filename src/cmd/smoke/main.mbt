@@ -24,7 +24,12 @@ async fn main {
 
   println("\n=== Workflow Runs ===")
   try {
-    let runs = @actions.list_workflow_runs(client, "mizchi", "flaker", per_page=3)
+    let runs = @actions.list_workflow_runs(
+      client,
+      "mizchi",
+      "flaker",
+      per_page=3,
+    )
     for run in runs.workflow_runs {
       println("  [\{run.conclusion}] \{run.head_sha.substring(end=7)}")
     }
@@ -42,7 +47,13 @@ async fn main {
 
   println("\n=== Check Runs (main) ===")
   try {
-    let checks = @checks.list_for_ref(client, "mizchi", "flaker", "main", per_page=5)
+    let checks = @checks.list_for_ref(
+      client,
+      "mizchi",
+      "flaker",
+      "main",
+      per_page=5,
+    )
     for cr in checks.check_runs {
       let conclusion = cr.conclusion.unwrap_or("pending")
       println("  [\{conclusion}] \{cr.name}")
@@ -54,7 +65,9 @@ async fn main {
   println("\n=== Compare (HEAD~3...HEAD) ===")
   try {
     let cmp = @repos.compare(client, "mizchi", "flaker", "HEAD~3", "HEAD")
-    println("Status: \{cmp.status}, commits: \{cmp.total_commits}, files: \{cmp.files.length()}")
+    println(
+      "Status: \{cmp.status}, commits: \{cmp.total_commits}, files: \{cmp.files.length()}",
+    )
   } catch {
     e => println("Error: \{e}")
   }

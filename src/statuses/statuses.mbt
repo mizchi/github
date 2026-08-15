@@ -1,33 +1,61 @@
-///| A commit status.
+///|
+/// A commit status.
 pub struct Status {
   id : Double
   state : String
   target_url : String?
   description : String?
   context : String
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Eq, FromJson, ToJson)
 
-///| Combined status for a ref.
+///|
+pub impl Show for Status with output(self, logger) {
+  logger.write_string("{id: ")
+  self.id.output(logger)
+  logger.write_string(", state: ")
+  self.state.output(logger)
+  logger.write_string(", target_url: ")
+  self.target_url.output(logger)
+  logger.write_string(", description: ")
+  self.description.output(logger)
+  logger.write_string(", context: ")
+  self.context.output(logger)
+  logger.write_string("}")
+}
+
+///|
+/// Combined status for a ref.
 pub struct CombinedStatus {
   state : String
   total_count : Int
   statuses : Array[Status]
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Eq, FromJson, ToJson)
 
-///| Get the combined status for a ref (branch, tag, or SHA).
+///|
+pub impl Show for CombinedStatus with output(self, logger) {
+  logger.write_string("{state: ")
+  self.state.output(logger)
+  logger.write_string(", total_count: ")
+  self.total_count.output(logger)
+  logger.write_string(", statuses: ")
+  self.statuses.output(logger)
+  logger.write_string("}")
+}
+
+///|
+/// Get the combined status for a ref (branch, tag, or SHA).
 pub async fn get_combined(
   client : @client.GitHubClient,
   owner : String,
   repo : String,
   ref_ : String,
 ) -> CombinedStatus {
-  let json = client.get_json(
-    "/repos/\{owner}/\{repo}/commits/\{ref_}/status",
-  )
+  let json = client.get_json("/repos/\{owner}/\{repo}/commits/\{ref_}/status")
   @json.from_json(json)
 }
 
-///| List statuses for a ref.
+///|
+/// List statuses for a ref.
 pub async fn list(
   client : @client.GitHubClient,
   owner : String,
@@ -42,7 +70,8 @@ pub async fn list(
   @json.from_json(json)
 }
 
-///| Create a commit status.
+///|
+/// Create a commit status.
 pub async fn create(
   client : @client.GitHubClient,
   owner : String,

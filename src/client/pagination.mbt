@@ -1,4 +1,5 @@
-///| Parse the Link header to extract the "next" page URL path.
+///|
+/// Parse the Link header to extract the "next" page URL path.
 ///  Link: <https://api.github.com/repos/x/y/issues?page=2>; rel="next", ...
 pub fn parse_next_link(headers : Map[String, String]) -> String? {
   let link = match headers.get("link") {
@@ -13,11 +14,15 @@ pub fn parse_next_link(headers : Map[String, String]) -> String? {
       let mut start = -1
       let mut end = -1
       for i, c in s {
-        if c == '<' && start < 0 { start = i }
-        if c == '>' && start >= 0 && end < 0 { end = i }
+        if c == '<' && start < 0 {
+          start = i
+        }
+        if c == '>' && start >= 0 && end < 0 {
+          end = i
+        }
       }
       if start >= 0 && end > start {
-        let url = s.substring(start=start + 1, end=end)
+        let url = s.substring(start=start + 1, end~)
         let api_prefix = "https://api.github.com"
         if url.has_prefix(api_prefix) {
           return Some(url.substring(start=api_prefix.length()))
@@ -29,7 +34,8 @@ pub fn parse_next_link(headers : Map[String, String]) -> String? {
   None
 }
 
-///| Paginate through all pages of a GET endpoint, collecting JSON arrays.
+///|
+/// Paginate through all pages of a GET endpoint, collecting JSON arrays.
 pub async fn GitHubClient::get_all_pages(
   self : GitHubClient,
   initial_path : String,

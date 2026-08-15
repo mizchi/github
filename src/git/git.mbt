@@ -1,9 +1,21 @@
-///| A git reference (flattened from nested GitHub response).
+///|
+/// A git reference (flattened from nested GitHub response).
 pub struct Ref {
   ref_ : String
   object_sha : String
   object_type : String
-} derive(Show, Eq)
+} derive(Eq)
+
+///|
+pub impl Show for Ref with output(self, logger) {
+  logger.write_string("{ref_: ")
+  self.ref_.output(logger)
+  logger.write_string(", object_sha: ")
+  self.object_sha.output(logger)
+  logger.write_string(", object_type: ")
+  self.object_type.output(logger)
+  logger.write_string("}")
+}
 
 ///|
 pub impl @json.FromJson for Ref with from_json(json, path) {
@@ -42,7 +54,8 @@ pub impl ToJson for Ref with to_json(self) {
   obj.to_json()
 }
 
-///| Get a reference (e.g. "heads/main").
+///|
+/// Get a reference (e.g. "heads/main").
 pub async fn get_ref(
   client : @client.GitHubClient,
   owner : String,
@@ -53,7 +66,8 @@ pub async fn get_ref(
   @json.from_json(json)
 }
 
-///| Create a reference (e.g. "refs/heads/new-branch").
+///|
+/// Create a reference (e.g. "refs/heads/new-branch").
 pub async fn create_ref(
   client : @client.GitHubClient,
   owner : String,
@@ -61,15 +75,13 @@ pub async fn create_ref(
   ref_ : String,
   sha : String,
 ) -> Ref {
-  let obj : Map[String, Json] = {
-    "ref": ref_.to_json(),
-    "sha": sha.to_json(),
-  }
+  let obj : Map[String, Json] = { "ref": ref_.to_json(), "sha": sha.to_json() }
   let json = client.post_json("/repos/\{owner}/\{repo}/git/refs", obj.to_json())
   @json.from_json(json)
 }
 
-///| Delete a reference (e.g. "heads/branch-name").
+///|
+/// Delete a reference (e.g. "heads/branch-name").
 pub async fn delete_ref(
   client : @client.GitHubClient,
   owner : String,
@@ -79,13 +91,24 @@ pub async fn delete_ref(
   let _ = client.delete("/repos/\{owner}/\{repo}/git/refs/\{ref_}")
 }
 
-///| A git commit.
+///|
+/// A git commit.
 pub struct Commit {
   sha : String
   message : String
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Eq, FromJson, ToJson)
 
-///| Get a commit.
+///|
+pub impl Show for Commit with output(self, logger) {
+  logger.write_string("{sha: ")
+  self.sha.output(logger)
+  logger.write_string(", message: ")
+  self.message.output(logger)
+  logger.write_string("}")
+}
+
+///|
+/// Get a commit.
 pub async fn get_commit(
   client : @client.GitHubClient,
   owner : String,
@@ -96,20 +119,43 @@ pub async fn get_commit(
   @json.from_json(json)
 }
 
-///| A tree entry.
+///|
+/// A tree entry.
 pub struct TreeEntry {
   path : String
   mode : String
   sha : String
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Eq, FromJson, ToJson)
 
-///| Tree response.
+///|
+pub impl Show for TreeEntry with output(self, logger) {
+  logger.write_string("{path: ")
+  self.path.output(logger)
+  logger.write_string(", mode: ")
+  self.mode.output(logger)
+  logger.write_string(", sha: ")
+  self.sha.output(logger)
+  logger.write_string("}")
+}
+
+///|
+/// Tree response.
 pub struct Tree {
   sha : String
   tree : Array[TreeEntry]
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Eq, FromJson, ToJson)
 
-///| Get a tree.
+///|
+pub impl Show for Tree with output(self, logger) {
+  logger.write_string("{sha: ")
+  self.sha.output(logger)
+  logger.write_string(", tree: ")
+  self.tree.output(logger)
+  logger.write_string("}")
+}
+
+///|
+/// Get a tree.
 pub async fn get_tree(
   client : @client.GitHubClient,
   owner : String,
