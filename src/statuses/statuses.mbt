@@ -9,7 +9,7 @@ pub struct Status {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Status with output(self, logger) {
+pub impl Show for Status with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", state: ")
@@ -32,7 +32,7 @@ pub struct CombinedStatus {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for CombinedStatus with output(self, logger) {
+pub impl Show for CombinedStatus with fn output(self, logger) {
   logger.write_string("{state: ")
   self.state.output(logger)
   logger.write_string(", total_count: ")

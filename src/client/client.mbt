@@ -45,13 +45,13 @@ pub struct ApiResponse {
 }
 
 ///|
-pub impl Show for ApiResponse with output(self, logger) {
+pub impl Show for ApiResponse with fn output(self, logger) {
   logger.write_string("{json: ")
-  self.json.output(logger)
+  logger.write_string(@debug.to_string(self.json))
   logger.write_string(", status: ")
-  self.status.output(logger)
+  logger.write_string(self.status.to_string())
   logger.write_string(", headers: ")
-  self.headers.output(logger)
+  logger.write_string(@debug.to_string(self.headers))
   logger.write_string("}")
 }
 
@@ -208,12 +208,12 @@ pub suberror GitHubApiError {
 } derive(ToJson)
 
 ///|
-pub impl Show for GitHubApiError with output(self, logger) {
+pub impl Show for GitHubApiError with fn output(self, logger) {
   let GitHubApiError(code, msg) = self
   logger.write_string("GitHubApiError(")
-  code.output(logger)
+  logger.write_string(code.to_string())
   logger.write_string(", ")
-  msg.output(logger)
+  logger.write_string(msg)
   logger.write_string(")")
 }
 
@@ -223,11 +223,11 @@ pub suberror RateLimitError {
 } derive(ToJson)
 
 ///|
-pub impl Show for RateLimitError with output(self, logger) {
+pub impl Show for RateLimitError with fn output(self, logger) {
   let RateLimitError(code, msg) = self
   logger.write_string("RateLimitError(")
-  code.output(logger)
+  logger.write_string(code.to_string())
   logger.write_string(", ")
-  msg.output(logger)
+  logger.write_string(msg)
   logger.write_string(")")
 }

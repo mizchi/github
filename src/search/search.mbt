@@ -47,7 +47,7 @@ pub struct IssueSearchItem {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for IssueSearchItem with output(self, logger) {
+pub impl Show for IssueSearchItem with fn output(self, logger) {
   logger.write_string("{number: ")
   self.number.output(logger)
   logger.write_string(", title: ")
@@ -68,7 +68,7 @@ pub struct IssueSearchResponse {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for IssueSearchResponse with output(self, logger) {
+pub impl Show for IssueSearchResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
   self.total_count.output(logger)
   logger.write_string(", incomplete_results: ")
@@ -112,7 +112,7 @@ pub struct RepoSearchItem {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for RepoSearchItem with output(self, logger) {
+pub impl Show for RepoSearchItem with fn output(self, logger) {
   logger.write_string("{full_name: ")
   self.full_name.output(logger)
   logger.write_string(", html_url: ")
@@ -131,7 +131,7 @@ pub struct RepoSearchResponse {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for RepoSearchResponse with output(self, logger) {
+pub impl Show for RepoSearchResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
   self.total_count.output(logger)
   logger.write_string(", incomplete_results: ")
@@ -174,7 +174,7 @@ pub struct CodeSearchItem {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for CodeSearchItem with output(self, logger) {
+pub impl Show for CodeSearchItem with fn output(self, logger) {
   logger.write_string("{name: ")
   self.name.output(logger)
   logger.write_string(", path: ")
@@ -193,7 +193,7 @@ pub struct CodeSearchResponse {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for CodeSearchResponse with output(self, logger) {
+pub impl Show for CodeSearchResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
   self.total_count.output(logger)
   logger.write_string(", incomplete_results: ")

@@ -13,7 +13,7 @@ pub struct PullRequest {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for PullRequest with output(self, logger) {
+pub impl Show for PullRequest with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", number: ")
@@ -133,7 +133,7 @@ pub struct Review {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Review with output(self, logger) {
+pub impl Show for Review with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", state: ")
@@ -181,7 +181,7 @@ pub struct PullFile {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for PullFile with output(self, logger) {
+pub impl Show for PullFile with fn output(self, logger) {
   logger.write_string("{filename: ")
   self.filename.output(logger)
   logger.write_string(", status: ")

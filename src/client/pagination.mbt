@@ -8,7 +8,7 @@ pub fn parse_next_link(headers : Map[String, String]) -> String? {
   }
   let parts = link.split(",")
   for part in parts {
-    let s = part.to_string()
+    let s = part.to_owned()
     if s.contains("rel=\"next\"") {
       // Extract URL between < and >
       let mut start = -1
@@ -22,10 +22,10 @@ pub fn parse_next_link(headers : Map[String, String]) -> String? {
         }
       }
       if start >= 0 && end > start {
-        let url = s.substring(start=start + 1, end~)
+        let url = s[start + 1:end].to_owned()
         let api_prefix = "https://api.github.com"
         if url.has_prefix(api_prefix) {
-          return Some(url.substring(start=api_prefix.length()))
+          return Some(url[api_prefix.length():].to_owned())
         }
         return Some(url)
       }

@@ -10,7 +10,7 @@ pub struct Issue {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Issue with output(self, logger) {
+pub impl Show for Issue with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", number: ")
@@ -129,7 +129,7 @@ pub struct Comment {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Comment with output(self, logger) {
+pub impl Show for Comment with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", body: ")

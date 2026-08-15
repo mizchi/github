@@ -7,7 +7,7 @@ pub struct Ref {
 } derive(Eq)
 
 ///|
-pub impl Show for Ref with output(self, logger) {
+pub impl Show for Ref with fn output(self, logger) {
   logger.write_string("{ref_: ")
   self.ref_.output(logger)
   logger.write_string(", object_sha: ")
@@ -18,7 +18,7 @@ pub impl Show for Ref with output(self, logger) {
 }
 
 ///|
-pub impl @json.FromJson for Ref with from_json(json, path) {
+pub impl @json.FromJson for Ref with fn from_json(json, path) {
   guard json.as_object() is Some(obj) else {
     raise @json.JsonDecodeError((path, "expected object for Ref"))
   }
@@ -42,7 +42,7 @@ pub impl @json.FromJson for Ref with from_json(json, path) {
 }
 
 ///|
-pub impl ToJson for Ref with to_json(self) {
+pub impl ToJson for Ref with fn to_json(self) {
   let inner : Map[String, Json] = {
     "sha": self.object_sha.to_json(),
     "type": self.object_type.to_json(),
@@ -99,7 +99,7 @@ pub struct Commit {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Commit with output(self, logger) {
+pub impl Show for Commit with fn output(self, logger) {
   logger.write_string("{sha: ")
   self.sha.output(logger)
   logger.write_string(", message: ")
@@ -128,7 +128,7 @@ pub struct TreeEntry {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for TreeEntry with output(self, logger) {
+pub impl Show for TreeEntry with fn output(self, logger) {
   logger.write_string("{path: ")
   self.path.output(logger)
   logger.write_string(", mode: ")
@@ -146,7 +146,7 @@ pub struct Tree {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Tree with output(self, logger) {
+pub impl Show for Tree with fn output(self, logger) {
   logger.write_string("{sha: ")
   self.sha.output(logger)
   logger.write_string(", tree: ")

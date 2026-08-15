@@ -9,7 +9,7 @@ pub struct CheckRun {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for CheckRun with output(self, logger) {
+pub impl Show for CheckRun with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", name: ")
@@ -31,7 +31,7 @@ pub struct ListCheckRunsResponse {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for ListCheckRunsResponse with output(self, logger) {
+pub impl Show for ListCheckRunsResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
   self.total_count.output(logger)
   logger.write_string(", check_runs: ")
@@ -77,7 +77,7 @@ pub struct CheckSuite {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for CheckSuite with output(self, logger) {
+pub impl Show for CheckSuite with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", status: ")
@@ -95,7 +95,7 @@ pub struct ListCheckSuitesResponse {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for ListCheckSuitesResponse with output(self, logger) {
+pub impl Show for ListCheckSuitesResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
   self.total_count.output(logger)
   logger.write_string(", check_suites: ")

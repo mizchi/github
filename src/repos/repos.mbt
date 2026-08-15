@@ -10,7 +10,7 @@ pub struct Repository {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Repository with output(self, logger) {
+pub impl Show for Repository with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", name: ")
@@ -48,7 +48,7 @@ pub struct Content {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Content with output(self, logger) {
+pub impl Show for Content with fn output(self, logger) {
   logger.write_string("{name: ")
   self.name.output(logger)
   logger.write_string(", path: ")
@@ -87,7 +87,7 @@ pub struct Branch {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Branch with output(self, logger) {
+pub impl Show for Branch with fn output(self, logger) {
   logger.write_string("{name: ")
   self.name.output(logger)
   logger.write_string("}")
@@ -102,7 +102,7 @@ pub struct Tag {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Tag with output(self, logger) {
+pub impl Show for Tag with fn output(self, logger) {
   logger.write_string("{name: ")
   self.name.output(logger)
   logger.write_string(", zipball_url: ")
@@ -138,7 +138,7 @@ pub struct Release {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Release with output(self, logger) {
+pub impl Show for Release with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", tag_name: ")
@@ -223,7 +223,7 @@ pub struct CompareFile {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for CompareFile with output(self, logger) {
+pub impl Show for CompareFile with fn output(self, logger) {
   logger.write_string("{filename: ")
   self.filename.output(logger)
   logger.write_string(", status: ")
@@ -246,7 +246,7 @@ pub struct Comparison {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Comparison with output(self, logger) {
+pub impl Show for Comparison with fn output(self, logger) {
   logger.write_string("{status: ")
   self.status.output(logger)
   logger.write_string(", ahead_by: ")

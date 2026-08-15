@@ -12,7 +12,7 @@ pub struct WorkflowRun {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for WorkflowRun with output(self, logger) {
+pub impl Show for WorkflowRun with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", head_branch: ")
@@ -40,7 +40,7 @@ pub struct ListWorkflowRunsResponse {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for ListWorkflowRunsResponse with output(self, logger) {
+pub impl Show for ListWorkflowRunsResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
   self.total_count.output(logger)
   logger.write_string(", workflow_runs: ")
@@ -57,7 +57,7 @@ pub struct Artifact {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for Artifact with output(self, logger) {
+pub impl Show for Artifact with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", name: ")
@@ -75,7 +75,7 @@ pub struct ListArtifactsResponse {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for ListArtifactsResponse with output(self, logger) {
+pub impl Show for ListArtifactsResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
   self.total_count.output(logger)
   logger.write_string(", artifacts: ")

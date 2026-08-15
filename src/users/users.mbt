@@ -10,7 +10,7 @@ pub struct User {
 } derive(Eq, FromJson, ToJson)
 
 ///|
-pub impl Show for User with output(self, logger) {
+pub impl Show for User with fn output(self, logger) {
   logger.write_string("{id: ")
   self.id.output(logger)
   logger.write_string(", login: ")
