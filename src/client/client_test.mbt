@@ -8,6 +8,6 @@ async test "get_json fetches real endpoint" {
   let (response, body) = @http.get("https://httpbin.org/get")
   assert_eq(response.code, 200)
   let json = body.json()
-  guard json.as_object() is Some(obj) else { fail("expected object") }
+  guard json is Json::Object(obj) else { fail("expected object") }
   assert_true(obj.contains("headers"))
 }

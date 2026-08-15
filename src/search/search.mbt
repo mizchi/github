@@ -22,14 +22,14 @@ fn url_encode(s : String) -> String {
         if hi < 10 {
           hi.to_string()
         } else {
-          Char::from_int(hi - 10 + 65).to_string()
+          (hi - 10 + 65).unsafe_to_char().to_string()
         },
       )
       buf.write_string(
         if lo < 10 {
           lo.to_string()
         } else {
-          Char::from_int(lo - 10 + 65).to_string()
+          (lo - 10 + 65).unsafe_to_char().to_string()
         },
       )
     }
@@ -44,18 +44,18 @@ pub struct IssueSearchItem {
   title : String
   state : String
   html_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for IssueSearchItem with fn output(self, logger) {
   logger.write_string("{number: ")
-  self.number.output(logger)
+  logger.write_string(@debug.to_string(self.number))
   logger.write_string(", title: ")
-  self.title.output(logger)
+  logger.write_string(@debug.to_string(self.title))
   logger.write_string(", state: ")
-  self.state.output(logger)
+  logger.write_string(@debug.to_string(self.state))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string("}")
 }
 
@@ -65,16 +65,16 @@ pub struct IssueSearchResponse {
   total_count : Int
   incomplete_results : Bool
   items : Array[IssueSearchItem]
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for IssueSearchResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
-  self.total_count.output(logger)
+  logger.write_string(@debug.to_string(self.total_count))
   logger.write_string(", incomplete_results: ")
-  self.incomplete_results.output(logger)
+  logger.write_string(@debug.to_string(self.incomplete_results))
   logger.write_string(", items: ")
-  self.items.output(logger)
+  logger.write_string(@debug.to_string(self.items))
   logger.write_string("}")
 }
 
@@ -109,16 +109,16 @@ pub struct RepoSearchItem {
   full_name : String
   html_url : String
   stargazers_count : Int
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for RepoSearchItem with fn output(self, logger) {
   logger.write_string("{full_name: ")
-  self.full_name.output(logger)
+  logger.write_string(@debug.to_string(self.full_name))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string(", stargazers_count: ")
-  self.stargazers_count.output(logger)
+  logger.write_string(@debug.to_string(self.stargazers_count))
   logger.write_string("}")
 }
 
@@ -128,16 +128,16 @@ pub struct RepoSearchResponse {
   total_count : Int
   incomplete_results : Bool
   items : Array[RepoSearchItem]
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for RepoSearchResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
-  self.total_count.output(logger)
+  logger.write_string(@debug.to_string(self.total_count))
   logger.write_string(", incomplete_results: ")
-  self.incomplete_results.output(logger)
+  logger.write_string(@debug.to_string(self.incomplete_results))
   logger.write_string(", items: ")
-  self.items.output(logger)
+  logger.write_string(@debug.to_string(self.items))
   logger.write_string("}")
 }
 
@@ -171,16 +171,16 @@ pub struct CodeSearchItem {
   name : String
   path : String
   html_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for CodeSearchItem with fn output(self, logger) {
   logger.write_string("{name: ")
-  self.name.output(logger)
+  logger.write_string(@debug.to_string(self.name))
   logger.write_string(", path: ")
-  self.path.output(logger)
+  logger.write_string(@debug.to_string(self.path))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string("}")
 }
 
@@ -190,16 +190,16 @@ pub struct CodeSearchResponse {
   total_count : Int
   incomplete_results : Bool
   items : Array[CodeSearchItem]
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for CodeSearchResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
-  self.total_count.output(logger)
+  logger.write_string(@debug.to_string(self.total_count))
   logger.write_string(", incomplete_results: ")
-  self.incomplete_results.output(logger)
+  logger.write_string(@debug.to_string(self.incomplete_results))
   logger.write_string(", items: ")
-  self.items.output(logger)
+  logger.write_string(@debug.to_string(self.items))
   logger.write_string("}")
 }
 

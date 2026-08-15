@@ -1,0 +1,50 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/checks"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn get(@client.GitHubClient, String, String, Double) -> CheckRun
+
+pub async fn list_for_ref(@client.GitHubClient, String, String, String, per_page? : Int) -> ListCheckRunsResponse
+
+pub async fn list_suites_for_ref(@client.GitHubClient, String, String, String) -> ListCheckSuitesResponse
+
+// Errors
+
+// Types and methods
+pub struct CheckRun {
+  id : Double
+  name : String
+  status : String
+  conclusion : String?
+  html_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for CheckRun
+
+pub struct CheckSuite {
+  id : Double
+  status : String
+  conclusion : String?
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for CheckSuite
+
+pub struct ListCheckRunsResponse {
+  total_count : Int
+  check_runs : Array[CheckRun]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for ListCheckRunsResponse
+
+pub struct ListCheckSuitesResponse {
+  total_count : Int
+  check_suites : Array[CheckSuite]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for ListCheckSuitesResponse
+
+// Type aliases
+
+// Traits

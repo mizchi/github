@@ -10,28 +10,28 @@ pub struct PullRequest {
   head_ref : String?
   base_ref : String?
   mergeable : Bool?
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for PullRequest with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", number: ")
-  self.number.output(logger)
+  logger.write_string(@debug.to_string(self.number))
   logger.write_string(", title: ")
-  self.title.output(logger)
+  logger.write_string(@debug.to_string(self.title))
   logger.write_string(", body: ")
-  self.body.output(logger)
+  logger.write_string(@debug.to_string(self.body))
   logger.write_string(", state: ")
-  self.state.output(logger)
+  logger.write_string(@debug.to_string(self.state))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string(", head_ref: ")
-  self.head_ref.output(logger)
+  logger.write_string(@debug.to_string(self.head_ref))
   logger.write_string(", base_ref: ")
-  self.base_ref.output(logger)
+  logger.write_string(@debug.to_string(self.base_ref))
   logger.write_string(", mergeable: ")
-  self.mergeable.output(logger)
+  logger.write_string(@debug.to_string(self.mergeable))
   logger.write_string("}")
 }
 
@@ -100,7 +100,7 @@ pub async fn update(
   state? : String,
   base? : String,
 ) -> PullRequest {
-  let obj : Map[String, Json] = {}
+  let obj : Map[String, Json] = Map([])
   match title {
     Some(t) => obj.set("title", t.to_json())
     None => ()
@@ -130,16 +130,16 @@ pub struct Review {
   id : Double
   state : String
   body : String?
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Review with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", state: ")
-  self.state.output(logger)
+  logger.write_string(@debug.to_string(self.state))
   logger.write_string(", body: ")
-  self.body.output(logger)
+  logger.write_string(@debug.to_string(self.body))
   logger.write_string("}")
 }
 
@@ -178,18 +178,18 @@ pub struct PullFile {
   status : String
   additions : Int
   deletions : Int
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for PullFile with fn output(self, logger) {
   logger.write_string("{filename: ")
-  self.filename.output(logger)
+  logger.write_string(@debug.to_string(self.filename))
   logger.write_string(", status: ")
-  self.status.output(logger)
+  logger.write_string(@debug.to_string(self.status))
   logger.write_string(", additions: ")
-  self.additions.output(logger)
+  logger.write_string(@debug.to_string(self.additions))
   logger.write_string(", deletions: ")
-  self.deletions.output(logger)
+  logger.write_string(@debug.to_string(self.deletions))
   logger.write_string("}")
 }
 
@@ -214,7 +214,7 @@ pub async fn merge(
   number : Int,
   merge_method? : String,
 ) -> Json {
-  let obj : Map[String, Json] = {}
+  let obj : Map[String, Json] = Map([])
   match merge_method {
     Some(m) => obj.set("merge_method", m.to_json())
     None => ()

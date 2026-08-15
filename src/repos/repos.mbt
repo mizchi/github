@@ -7,22 +7,22 @@ pub struct Repository {
   default_branch : String
   html_url : String
   clone_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Repository with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", name: ")
-  self.name.output(logger)
+  logger.write_string(@debug.to_string(self.name))
   logger.write_string(", full_name: ")
-  self.full_name.output(logger)
+  logger.write_string(@debug.to_string(self.full_name))
   logger.write_string(", default_branch: ")
-  self.default_branch.output(logger)
+  logger.write_string(@debug.to_string(self.default_branch))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string(", clone_url: ")
-  self.clone_url.output(logger)
+  logger.write_string(@debug.to_string(self.clone_url))
   logger.write_string("}")
 }
 
@@ -45,20 +45,20 @@ pub struct Content {
   sha : String
   content : String?
   encoding : String?
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Content with fn output(self, logger) {
   logger.write_string("{name: ")
-  self.name.output(logger)
+  logger.write_string(@debug.to_string(self.name))
   logger.write_string(", path: ")
-  self.path.output(logger)
+  logger.write_string(@debug.to_string(self.path))
   logger.write_string(", sha: ")
-  self.sha.output(logger)
+  logger.write_string(@debug.to_string(self.sha))
   logger.write_string(", content: ")
-  self.content.output(logger)
+  logger.write_string(@debug.to_string(self.content))
   logger.write_string(", encoding: ")
-  self.encoding.output(logger)
+  logger.write_string(@debug.to_string(self.encoding))
   logger.write_string("}")
 }
 
@@ -84,12 +84,12 @@ pub async fn get_content(
 /// Branch information.
 pub struct Branch {
   name : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Branch with fn output(self, logger) {
   logger.write_string("{name: ")
-  self.name.output(logger)
+  logger.write_string(@debug.to_string(self.name))
   logger.write_string("}")
 }
 
@@ -99,16 +99,16 @@ pub struct Tag {
   name : String
   zipball_url : String
   tarball_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Tag with fn output(self, logger) {
   logger.write_string("{name: ")
-  self.name.output(logger)
+  logger.write_string(@debug.to_string(self.name))
   logger.write_string(", zipball_url: ")
-  self.zipball_url.output(logger)
+  logger.write_string(@debug.to_string(self.zipball_url))
   logger.write_string(", tarball_url: ")
-  self.tarball_url.output(logger)
+  logger.write_string(@debug.to_string(self.tarball_url))
   logger.write_string("}")
 }
 
@@ -135,24 +135,24 @@ pub struct Release {
   draft : Bool
   prerelease : Bool
   html_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Release with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", tag_name: ")
-  self.tag_name.output(logger)
+  logger.write_string(@debug.to_string(self.tag_name))
   logger.write_string(", name: ")
-  self.name.output(logger)
+  logger.write_string(@debug.to_string(self.name))
   logger.write_string(", body: ")
-  self.body.output(logger)
+  logger.write_string(@debug.to_string(self.body))
   logger.write_string(", draft: ")
-  self.draft.output(logger)
+  logger.write_string(@debug.to_string(self.draft))
   logger.write_string(", prerelease: ")
-  self.prerelease.output(logger)
+  logger.write_string(@debug.to_string(self.prerelease))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string("}")
 }
 
@@ -220,18 +220,18 @@ pub struct CompareFile {
   status : String
   additions : Int
   deletions : Int
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for CompareFile with fn output(self, logger) {
   logger.write_string("{filename: ")
-  self.filename.output(logger)
+  logger.write_string(@debug.to_string(self.filename))
   logger.write_string(", status: ")
-  self.status.output(logger)
+  logger.write_string(@debug.to_string(self.status))
   logger.write_string(", additions: ")
-  self.additions.output(logger)
+  logger.write_string(@debug.to_string(self.additions))
   logger.write_string(", deletions: ")
-  self.deletions.output(logger)
+  logger.write_string(@debug.to_string(self.deletions))
   logger.write_string("}")
 }
 
@@ -243,20 +243,20 @@ pub struct Comparison {
   behind_by : Int
   total_commits : Int
   files : Array[CompareFile]
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Comparison with fn output(self, logger) {
   logger.write_string("{status: ")
-  self.status.output(logger)
+  logger.write_string(@debug.to_string(self.status))
   logger.write_string(", ahead_by: ")
-  self.ahead_by.output(logger)
+  logger.write_string(@debug.to_string(self.ahead_by))
   logger.write_string(", behind_by: ")
-  self.behind_by.output(logger)
+  logger.write_string(@debug.to_string(self.behind_by))
   logger.write_string(", total_commits: ")
-  self.total_commits.output(logger)
+  logger.write_string(@debug.to_string(self.total_commits))
   logger.write_string(", files: ")
-  self.files.output(logger)
+  logger.write_string(@debug.to_string(self.files))
   logger.write_string("}")
 }
 

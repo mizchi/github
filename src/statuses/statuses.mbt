@@ -6,20 +6,20 @@ pub struct Status {
   target_url : String?
   description : String?
   context : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Status with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", state: ")
-  self.state.output(logger)
+  logger.write_string(@debug.to_string(self.state))
   logger.write_string(", target_url: ")
-  self.target_url.output(logger)
+  logger.write_string(@debug.to_string(self.target_url))
   logger.write_string(", description: ")
-  self.description.output(logger)
+  logger.write_string(@debug.to_string(self.description))
   logger.write_string(", context: ")
-  self.context.output(logger)
+  logger.write_string(@debug.to_string(self.context))
   logger.write_string("}")
 }
 
@@ -29,16 +29,16 @@ pub struct CombinedStatus {
   state : String
   total_count : Int
   statuses : Array[Status]
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for CombinedStatus with fn output(self, logger) {
   logger.write_string("{state: ")
-  self.state.output(logger)
+  logger.write_string(@debug.to_string(self.state))
   logger.write_string(", total_count: ")
-  self.total_count.output(logger)
+  logger.write_string(@debug.to_string(self.total_count))
   logger.write_string(", statuses: ")
-  self.statuses.output(logger)
+  logger.write_string(@debug.to_string(self.statuses))
   logger.write_string("}")
 }
 

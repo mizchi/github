@@ -4,22 +4,22 @@ pub struct Ref {
   ref_ : String
   object_sha : String
   object_type : String
-} derive(Eq)
+} derive(Debug, Eq)
 
 ///|
 pub impl Show for Ref with fn output(self, logger) {
   logger.write_string("{ref_: ")
-  self.ref_.output(logger)
+  logger.write_string(@debug.to_string(self.ref_))
   logger.write_string(", object_sha: ")
-  self.object_sha.output(logger)
+  logger.write_string(@debug.to_string(self.object_sha))
   logger.write_string(", object_type: ")
-  self.object_type.output(logger)
+  logger.write_string(@debug.to_string(self.object_type))
   logger.write_string("}")
 }
 
 ///|
 pub impl @json.FromJson for Ref with fn from_json(json, path) {
-  guard json.as_object() is Some(obj) else {
+  guard json is Json::Object(obj) else {
     raise @json.JsonDecodeError((path, "expected object for Ref"))
   }
   let ref_ = match obj.get("ref") {
@@ -96,14 +96,14 @@ pub async fn delete_ref(
 pub struct Commit {
   sha : String
   message : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Commit with fn output(self, logger) {
   logger.write_string("{sha: ")
-  self.sha.output(logger)
+  logger.write_string(@debug.to_string(self.sha))
   logger.write_string(", message: ")
-  self.message.output(logger)
+  logger.write_string(@debug.to_string(self.message))
   logger.write_string("}")
 }
 
@@ -125,16 +125,16 @@ pub struct TreeEntry {
   path : String
   mode : String
   sha : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for TreeEntry with fn output(self, logger) {
   logger.write_string("{path: ")
-  self.path.output(logger)
+  logger.write_string(@debug.to_string(self.path))
   logger.write_string(", mode: ")
-  self.mode.output(logger)
+  logger.write_string(@debug.to_string(self.mode))
   logger.write_string(", sha: ")
-  self.sha.output(logger)
+  logger.write_string(@debug.to_string(self.sha))
   logger.write_string("}")
 }
 
@@ -143,14 +143,14 @@ pub impl Show for TreeEntry with fn output(self, logger) {
 pub struct Tree {
   sha : String
   tree : Array[TreeEntry]
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Tree with fn output(self, logger) {
   logger.write_string("{sha: ")
-  self.sha.output(logger)
+  logger.write_string(@debug.to_string(self.sha))
   logger.write_string(", tree: ")
-  self.tree.output(logger)
+  logger.write_string(@debug.to_string(self.tree))
   logger.write_string("}")
 }
 

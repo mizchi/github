@@ -7,22 +7,22 @@ pub struct Issue {
   body : String?
   state : String
   html_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Issue with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", number: ")
-  self.number.output(logger)
+  logger.write_string(@debug.to_string(self.number))
   logger.write_string(", title: ")
-  self.title.output(logger)
+  logger.write_string(@debug.to_string(self.title))
   logger.write_string(", body: ")
-  self.body.output(logger)
+  logger.write_string(@debug.to_string(self.body))
   logger.write_string(", state: ")
-  self.state.output(logger)
+  logger.write_string(@debug.to_string(self.state))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string("}")
 }
 
@@ -84,7 +84,7 @@ pub async fn update(
   body? : String,
   state? : String,
 ) -> Issue {
-  let obj : Map[String, Json] = {}
+  let obj : Map[String, Json] = Map([])
   match title {
     Some(t) => obj.set("title", t.to_json())
     None => ()
@@ -126,16 +126,16 @@ pub struct Comment {
   id : Double
   body : String
   html_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for Comment with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", body: ")
-  self.body.output(logger)
+  logger.write_string(@debug.to_string(self.body))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string("}")
 }
 

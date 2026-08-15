@@ -6,20 +6,20 @@ pub struct CheckRun {
   status : String
   conclusion : String?
   html_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for CheckRun with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", name: ")
-  self.name.output(logger)
+  logger.write_string(@debug.to_string(self.name))
   logger.write_string(", status: ")
-  self.status.output(logger)
+  logger.write_string(@debug.to_string(self.status))
   logger.write_string(", conclusion: ")
-  self.conclusion.output(logger)
+  logger.write_string(@debug.to_string(self.conclusion))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string("}")
 }
 
@@ -28,14 +28,14 @@ pub impl Show for CheckRun with fn output(self, logger) {
 pub struct ListCheckRunsResponse {
   total_count : Int
   check_runs : Array[CheckRun]
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for ListCheckRunsResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
-  self.total_count.output(logger)
+  logger.write_string(@debug.to_string(self.total_count))
   logger.write_string(", check_runs: ")
-  self.check_runs.output(logger)
+  logger.write_string(@debug.to_string(self.check_runs))
   logger.write_string("}")
 }
 
@@ -74,16 +74,16 @@ pub struct CheckSuite {
   id : Double
   status : String
   conclusion : String?
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for CheckSuite with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", status: ")
-  self.status.output(logger)
+  logger.write_string(@debug.to_string(self.status))
   logger.write_string(", conclusion: ")
-  self.conclusion.output(logger)
+  logger.write_string(@debug.to_string(self.conclusion))
   logger.write_string("}")
 }
 
@@ -92,14 +92,14 @@ pub impl Show for CheckSuite with fn output(self, logger) {
 pub struct ListCheckSuitesResponse {
   total_count : Int
   check_suites : Array[CheckSuite]
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for ListCheckSuitesResponse with fn output(self, logger) {
   logger.write_string("{total_count: ")
-  self.total_count.output(logger)
+  logger.write_string(@debug.to_string(self.total_count))
   logger.write_string(", check_suites: ")
-  self.check_suites.output(logger)
+  logger.write_string(@debug.to_string(self.check_suites))
   logger.write_string("}")
 }
 

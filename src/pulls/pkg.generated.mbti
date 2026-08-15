@@ -1,0 +1,60 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/pulls"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn create(@client.GitHubClient, String, String, String, String, String, body? : String) -> PullRequest
+
+pub async fn get(@client.GitHubClient, String, String, Int) -> PullRequest
+
+pub async fn list(@client.GitHubClient, String, String, state? : String, per_page? : Int) -> Array[PullRequest]
+
+pub async fn list_files(@client.GitHubClient, String, String, Int) -> Array[PullFile]
+
+pub async fn list_reviews(@client.GitHubClient, String, String, Int) -> Array[Review]
+
+pub async fn merge(@client.GitHubClient, String, String, Int, merge_method? : String) -> Json
+
+pub async fn request_reviewers(@client.GitHubClient, String, String, Int, Array[String]) -> Json
+
+pub async fn update(@client.GitHubClient, String, String, Int, title? : String, body? : String, state? : String, base? : String) -> PullRequest
+
+// Errors
+
+// Types and methods
+pub struct PullFile {
+  filename : String
+  status : String
+  additions : Int
+  deletions : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for PullFile
+
+pub struct PullRequest {
+  id : Double
+  number : Int
+  title : String
+  body : String?
+  state : String
+  html_url : String
+  head_ref : String?
+  base_ref : String?
+  mergeable : Bool?
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for PullRequest
+
+pub struct Review {
+  id : Double
+  state : String
+  body : String?
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Review
+
+// Type aliases
+
+// Traits

@@ -31,7 +31,7 @@ async fn main {
       per_page=3,
     )
     for run in runs.workflow_runs {
-      println("  [\{run.conclusion}] \{run.head_sha.substring(end=7)}")
+      println("  [\{run.conclusion}] \{run.head_sha[:7].to_owned()}")
     }
   } catch {
     e => println("Error: \{e}")
@@ -77,9 +77,9 @@ async fn main {
     let all = client.get_all_pages(
       "/repos/mizchi/flaker/branches?per_page=3",
       fn(json) {
-        match json.as_array() {
-          Some(arr) => arr
-          None => []
+        match json {
+          Array(arr) => arr
+          _ => []
         }
       },
       max_pages=5,

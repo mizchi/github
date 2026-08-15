@@ -7,22 +7,22 @@ pub struct User {
   email : String?
   avatar_url : String
   html_url : String
-} derive(Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
 ///|
 pub impl Show for User with fn output(self, logger) {
   logger.write_string("{id: ")
-  self.id.output(logger)
+  logger.write_string(@debug.to_string(self.id))
   logger.write_string(", login: ")
-  self.login.output(logger)
+  logger.write_string(@debug.to_string(self.login))
   logger.write_string(", name: ")
-  self.name.output(logger)
+  logger.write_string(@debug.to_string(self.name))
   logger.write_string(", email: ")
-  self.email.output(logger)
+  logger.write_string(@debug.to_string(self.email))
   logger.write_string(", avatar_url: ")
-  self.avatar_url.output(logger)
+  logger.write_string(@debug.to_string(self.avatar_url))
   logger.write_string(", html_url: ")
-  self.html_url.output(logger)
+  logger.write_string(@debug.to_string(self.html_url))
   logger.write_string("}")
 }
 

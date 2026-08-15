@@ -1,0 +1,91 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/repos"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn compare(@client.GitHubClient, String, String, String, String) -> Comparison
+
+pub async fn create_release(@client.GitHubClient, String, String, String, name? : String, body? : String, draft? : Bool, prerelease? : Bool) -> Release
+
+pub async fn get(@client.GitHubClient, String, String) -> Repository
+
+pub async fn get_content(@client.GitHubClient, String, String, String, ref_? : String) -> Content
+
+pub async fn get_latest_release(@client.GitHubClient, String, String) -> Release
+
+pub async fn list_branches(@client.GitHubClient, String, String) -> Array[Branch]
+
+pub async fn list_releases(@client.GitHubClient, String, String, per_page? : Int) -> Array[Release]
+
+pub async fn list_tags(@client.GitHubClient, String, String, per_page? : Int) -> Array[Tag]
+
+// Errors
+
+// Types and methods
+pub struct Branch {
+  name : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Branch
+
+pub struct CompareFile {
+  filename : String
+  status : String
+  additions : Int
+  deletions : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for CompareFile
+
+pub struct Comparison {
+  status : String
+  ahead_by : Int
+  behind_by : Int
+  total_commits : Int
+  files : Array[CompareFile]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Comparison
+
+pub struct Content {
+  name : String
+  path : String
+  sha : String
+  content : String?
+  encoding : String?
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Content
+
+pub struct Release {
+  id : Double
+  tag_name : String
+  name : String?
+  body : String?
+  draft : Bool
+  prerelease : Bool
+  html_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Release
+
+pub struct Repository {
+  id : Double
+  name : String
+  full_name : String
+  default_branch : String
+  html_url : String
+  clone_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Repository
+
+pub struct Tag {
+  name : String
+  zipball_url : String
+  tarball_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Tag
+
+// Type aliases
+
+// Traits
