@@ -1,19 +1,46 @@
-///| A check run.
+///|
+/// A check run.
 pub struct CheckRun {
   id : Double
   name : String
   status : String
   conclusion : String?
   html_url : String
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| Response from listing check runs.
+///|
+pub impl Show for CheckRun with fn output(self, logger) {
+  logger.write_string("{id: ")
+  logger.write_string(@debug.to_string(self.id))
+  logger.write_string(", name: ")
+  logger.write_string(@debug.to_string(self.name))
+  logger.write_string(", status: ")
+  logger.write_string(@debug.to_string(self.status))
+  logger.write_string(", conclusion: ")
+  logger.write_string(@debug.to_string(self.conclusion))
+  logger.write_string(", html_url: ")
+  logger.write_string(@debug.to_string(self.html_url))
+  logger.write_string("}")
+}
+
+///|
+/// Response from listing check runs.
 pub struct ListCheckRunsResponse {
   total_count : Int
   check_runs : Array[CheckRun]
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| List check runs for a git reference (branch, tag, or SHA).
+///|
+pub impl Show for ListCheckRunsResponse with fn output(self, logger) {
+  logger.write_string("{total_count: ")
+  logger.write_string(@debug.to_string(self.total_count))
+  logger.write_string(", check_runs: ")
+  logger.write_string(@debug.to_string(self.check_runs))
+  logger.write_string("}")
+}
+
+///|
+/// List check runs for a git reference (branch, tag, or SHA).
 pub async fn list_for_ref(
   client : @client.GitHubClient,
   owner : String,
@@ -28,7 +55,8 @@ pub async fn list_for_ref(
   @json.from_json(json)
 }
 
-///| Get a single check run.
+///|
+/// Get a single check run.
 pub async fn get(
   client : @client.GitHubClient,
   owner : String,
@@ -36,26 +64,47 @@ pub async fn get(
   check_run_id : Double,
 ) -> CheckRun {
   let id = check_run_id.to_int()
-  let json = client.get_json(
-    "/repos/\{owner}/\{repo}/check-runs/\{id}",
-  )
+  let json = client.get_json("/repos/\{owner}/\{repo}/check-runs/\{id}")
   @json.from_json(json)
 }
 
-///| A check suite.
+///|
+/// A check suite.
 pub struct CheckSuite {
   id : Double
   status : String
   conclusion : String?
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| Response from listing check suites.
+///|
+pub impl Show for CheckSuite with fn output(self, logger) {
+  logger.write_string("{id: ")
+  logger.write_string(@debug.to_string(self.id))
+  logger.write_string(", status: ")
+  logger.write_string(@debug.to_string(self.status))
+  logger.write_string(", conclusion: ")
+  logger.write_string(@debug.to_string(self.conclusion))
+  logger.write_string("}")
+}
+
+///|
+/// Response from listing check suites.
 pub struct ListCheckSuitesResponse {
   total_count : Int
   check_suites : Array[CheckSuite]
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| List check suites for a git reference.
+///|
+pub impl Show for ListCheckSuitesResponse with fn output(self, logger) {
+  logger.write_string("{total_count: ")
+  logger.write_string(@debug.to_string(self.total_count))
+  logger.write_string(", check_suites: ")
+  logger.write_string(@debug.to_string(self.check_suites))
+  logger.write_string("}")
+}
+
+///|
+/// List check suites for a git reference.
 pub async fn list_suites_for_ref(
   client : @client.GitHubClient,
   owner : String,

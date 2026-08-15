@@ -1,0 +1,47 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/issues"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn add_labels(@client.GitHubClient, String, String, Int, Array[String]) -> Json
+
+pub async fn create(@client.GitHubClient, String, String, String, body? : String) -> Issue
+
+pub async fn create_comment(@client.GitHubClient, String, String, Int, String) -> Comment
+
+pub async fn get(@client.GitHubClient, String, String, Int) -> Issue
+
+pub async fn list(@client.GitHubClient, String, String, state? : String, per_page? : Int) -> Array[Issue]
+
+pub async fn list_comments(@client.GitHubClient, String, String, Int) -> Array[Comment]
+
+pub async fn update(@client.GitHubClient, String, String, Int, title? : String, body? : String, state? : String) -> Issue
+
+// Errors
+
+// Types and methods
+pub struct Comment {
+  id : Double
+  body : String
+  html_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Comment
+
+pub struct Issue {
+  id : Double
+  number : Int
+  title : String
+  body : String?
+  state : String
+  html_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Issue
+
+// Type aliases
+
+// Traits

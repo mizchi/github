@@ -1,0 +1,53 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/actions"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn download_artifact(@client.GitHubClient, String, String, Double) -> Bytes
+
+pub async fn list_artifacts(@client.GitHubClient, String, String, Double) -> ListArtifactsResponse
+
+pub async fn list_workflow_runs(@client.GitHubClient, String, String, branch? : String, created? : String, per_page? : Int) -> ListWorkflowRunsResponse
+
+// Errors
+
+// Types and methods
+pub struct Artifact {
+  id : Double
+  name : String
+  expired : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Artifact
+
+pub struct ListArtifactsResponse {
+  total_count : Int
+  artifacts : Array[Artifact]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for ListArtifactsResponse
+
+pub struct ListWorkflowRunsResponse {
+  total_count : Int
+  workflow_runs : Array[WorkflowRun]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for ListWorkflowRunsResponse
+
+pub struct WorkflowRun {
+  id : Double
+  head_branch : String
+  head_sha : String
+  event : String
+  conclusion : String
+  created_at : String
+  run_started_at : String
+  updated_at : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for WorkflowRun
+
+// Type aliases
+
+// Traits

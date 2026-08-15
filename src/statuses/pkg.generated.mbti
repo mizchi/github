@@ -1,0 +1,38 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/statuses"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn create(@client.GitHubClient, String, String, String, String, target_url? : String, description? : String, context? : String) -> Status
+
+pub async fn get_combined(@client.GitHubClient, String, String, String) -> CombinedStatus
+
+pub async fn list(@client.GitHubClient, String, String, String, per_page? : Int) -> Array[Status]
+
+// Errors
+
+// Types and methods
+pub struct CombinedStatus {
+  state : String
+  total_count : Int
+  statuses : Array[Status]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for CombinedStatus
+
+pub struct Status {
+  id : Double
+  state : String
+  target_url : String?
+  description : String?
+  context : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Status
+
+// Type aliases
+
+// Traits

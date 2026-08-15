@@ -1,0 +1,30 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/users"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn get(@client.GitHubClient, String) -> User
+
+pub async fn get_authenticated(@client.GitHubClient) -> User
+
+// Errors
+
+// Types and methods
+pub struct User {
+  id : Double
+  login : String
+  name : String?
+  email : String?
+  avatar_url : String
+  html_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for User
+
+// Type aliases
+
+// Traits

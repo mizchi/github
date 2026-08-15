@@ -1,4 +1,5 @@
-///| A pull request.
+///|
+/// A pull request.
 pub struct PullRequest {
   id : Double
   number : Int
@@ -9,9 +10,33 @@ pub struct PullRequest {
   head_ref : String?
   base_ref : String?
   mergeable : Bool?
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| List pull requests.
+///|
+pub impl Show for PullRequest with fn output(self, logger) {
+  logger.write_string("{id: ")
+  logger.write_string(@debug.to_string(self.id))
+  logger.write_string(", number: ")
+  logger.write_string(@debug.to_string(self.number))
+  logger.write_string(", title: ")
+  logger.write_string(@debug.to_string(self.title))
+  logger.write_string(", body: ")
+  logger.write_string(@debug.to_string(self.body))
+  logger.write_string(", state: ")
+  logger.write_string(@debug.to_string(self.state))
+  logger.write_string(", html_url: ")
+  logger.write_string(@debug.to_string(self.html_url))
+  logger.write_string(", head_ref: ")
+  logger.write_string(@debug.to_string(self.head_ref))
+  logger.write_string(", base_ref: ")
+  logger.write_string(@debug.to_string(self.base_ref))
+  logger.write_string(", mergeable: ")
+  logger.write_string(@debug.to_string(self.mergeable))
+  logger.write_string("}")
+}
+
+///|
+/// List pull requests.
 pub async fn list(
   client : @client.GitHubClient,
   owner : String,
@@ -27,7 +52,8 @@ pub async fn list(
   @json.from_json(json)
 }
 
-///| Get a single pull request.
+///|
+/// Get a single pull request.
 pub async fn get(
   client : @client.GitHubClient,
   owner : String,
@@ -38,7 +64,8 @@ pub async fn get(
   @json.from_json(json)
 }
 
-///| Create a pull request.
+///|
+/// Create a pull request.
 pub async fn create(
   client : @client.GitHubClient,
   owner : String,
@@ -61,7 +88,8 @@ pub async fn create(
   @json.from_json(json)
 }
 
-///| Update a pull request.
+///|
+/// Update a pull request.
 pub async fn update(
   client : @client.GitHubClient,
   owner : String,
@@ -72,23 +100,51 @@ pub async fn update(
   state? : String,
   base? : String,
 ) -> PullRequest {
-  let obj : Map[String, Json] = {}
-  match title { Some(t) => obj.set("title", t.to_json()); None => () }
-  match body { Some(b) => obj.set("body", b.to_json()); None => () }
-  match state { Some(s) => obj.set("state", s.to_json()); None => () }
-  match base { Some(b) => obj.set("base", b.to_json()); None => () }
-  let json = client.patch_json("/repos/\{owner}/\{repo}/pulls/\{number}", obj.to_json())
+  let obj : Map[String, Json] = Map([])
+  match title {
+    Some(t) => obj.set("title", t.to_json())
+    None => ()
+  }
+  match body {
+    Some(b) => obj.set("body", b.to_json())
+    None => ()
+  }
+  match state {
+    Some(s) => obj.set("state", s.to_json())
+    None => ()
+  }
+  match base {
+    Some(b) => obj.set("base", b.to_json())
+    None => ()
+  }
+  let json = client.patch_json(
+    "/repos/\{owner}/\{repo}/pulls/\{number}",
+    obj.to_json(),
+  )
   @json.from_json(json)
 }
 
-///| A review on a pull request.
+///|
+/// A review on a pull request.
 pub struct Review {
   id : Double
   state : String
   body : String?
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| List reviews on a pull request.
+///|
+pub impl Show for Review with fn output(self, logger) {
+  logger.write_string("{id: ")
+  logger.write_string(@debug.to_string(self.id))
+  logger.write_string(", state: ")
+  logger.write_string(@debug.to_string(self.state))
+  logger.write_string(", body: ")
+  logger.write_string(@debug.to_string(self.body))
+  logger.write_string("}")
+}
+
+///|
+/// List reviews on a pull request.
 pub async fn list_reviews(
   client : @client.GitHubClient,
   owner : String,
@@ -99,7 +155,8 @@ pub async fn list_reviews(
   @json.from_json(json)
 }
 
-///| Request reviewers for a pull request.
+///|
+/// Request reviewers for a pull request.
 pub async fn request_reviewers(
   client : @client.GitHubClient,
   owner : String,
@@ -108,31 +165,48 @@ pub async fn request_reviewers(
   reviewers : Array[String],
 ) -> Json {
   let obj : Map[String, Json] = { "reviewers": reviewers.to_json() }
-  client.post_json("/repos/\{owner}/\{repo}/pulls/\{number}/requested_reviewers", obj.to_json())
+  client.post_json(
+    "/repos/\{owner}/\{repo}/pulls/\{number}/requested_reviewers",
+    obj.to_json(),
+  )
 }
 
-///| File changed in a pull request.
+///|
+/// File changed in a pull request.
 pub struct PullFile {
   filename : String
   status : String
   additions : Int
   deletions : Int
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| List files changed in a pull request.
+///|
+pub impl Show for PullFile with fn output(self, logger) {
+  logger.write_string("{filename: ")
+  logger.write_string(@debug.to_string(self.filename))
+  logger.write_string(", status: ")
+  logger.write_string(@debug.to_string(self.status))
+  logger.write_string(", additions: ")
+  logger.write_string(@debug.to_string(self.additions))
+  logger.write_string(", deletions: ")
+  logger.write_string(@debug.to_string(self.deletions))
+  logger.write_string("}")
+}
+
+///|
+/// List files changed in a pull request.
 pub async fn list_files(
   client : @client.GitHubClient,
   owner : String,
   repo : String,
   number : Int,
 ) -> Array[PullFile] {
-  let json = client.get_json(
-    "/repos/\{owner}/\{repo}/pulls/\{number}/files",
-  )
+  let json = client.get_json("/repos/\{owner}/\{repo}/pulls/\{number}/files")
   @json.from_json(json)
 }
 
-///| Merge a pull request.
+///|
+/// Merge a pull request.
 pub async fn merge(
   client : @client.GitHubClient,
   owner : String,
@@ -140,7 +214,7 @@ pub async fn merge(
   number : Int,
   merge_method? : String,
 ) -> Json {
-  let obj : Map[String, Json] = {}
+  let obj : Map[String, Json] = Map([])
   match merge_method {
     Some(m) => obj.set("merge_method", m.to_json())
     None => ()

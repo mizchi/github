@@ -1,4 +1,5 @@
-///| An issue.
+///|
+/// An issue.
 pub struct Issue {
   id : Double
   number : Int
@@ -6,9 +7,27 @@ pub struct Issue {
   body : String?
   state : String
   html_url : String
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| List issues for a repository.
+///|
+pub impl Show for Issue with fn output(self, logger) {
+  logger.write_string("{id: ")
+  logger.write_string(@debug.to_string(self.id))
+  logger.write_string(", number: ")
+  logger.write_string(@debug.to_string(self.number))
+  logger.write_string(", title: ")
+  logger.write_string(@debug.to_string(self.title))
+  logger.write_string(", body: ")
+  logger.write_string(@debug.to_string(self.body))
+  logger.write_string(", state: ")
+  logger.write_string(@debug.to_string(self.state))
+  logger.write_string(", html_url: ")
+  logger.write_string(@debug.to_string(self.html_url))
+  logger.write_string("}")
+}
+
+///|
+/// List issues for a repository.
 pub async fn list(
   client : @client.GitHubClient,
   owner : String,
@@ -24,7 +43,8 @@ pub async fn list(
   @json.from_json(json)
 }
 
-///| Get a single issue.
+///|
+/// Get a single issue.
 pub async fn get(
   client : @client.GitHubClient,
   owner : String,
@@ -35,7 +55,8 @@ pub async fn get(
   @json.from_json(json)
 }
 
-///| Create an issue.
+///|
+/// Create an issue.
 pub async fn create(
   client : @client.GitHubClient,
   owner : String,
@@ -52,7 +73,8 @@ pub async fn create(
   @json.from_json(json)
 }
 
-///| Update an issue (title, body, state).
+///|
+/// Update an issue (title, body, state).
 pub async fn update(
   client : @client.GitHubClient,
   owner : String,
@@ -62,15 +84,28 @@ pub async fn update(
   body? : String,
   state? : String,
 ) -> Issue {
-  let obj : Map[String, Json] = {}
-  match title { Some(t) => obj.set("title", t.to_json()); None => () }
-  match body { Some(b) => obj.set("body", b.to_json()); None => () }
-  match state { Some(s) => obj.set("state", s.to_json()); None => () }
-  let json = client.patch_json("/repos/\{owner}/\{repo}/issues/\{number}", obj.to_json())
+  let obj : Map[String, Json] = Map([])
+  match title {
+    Some(t) => obj.set("title", t.to_json())
+    None => ()
+  }
+  match body {
+    Some(b) => obj.set("body", b.to_json())
+    None => ()
+  }
+  match state {
+    Some(s) => obj.set("state", s.to_json())
+    None => ()
+  }
+  let json = client.patch_json(
+    "/repos/\{owner}/\{repo}/issues/\{number}",
+    obj.to_json(),
+  )
   @json.from_json(json)
 }
 
-///| Add labels to an issue.
+///|
+/// Add labels to an issue.
 pub async fn add_labels(
   client : @client.GitHubClient,
   owner : String,
@@ -79,17 +114,33 @@ pub async fn add_labels(
   labels : Array[String],
 ) -> Json {
   let obj : Map[String, Json] = { "labels": labels.to_json() }
-  client.post_json("/repos/\{owner}/\{repo}/issues/\{number}/labels", obj.to_json())
+  client.post_json(
+    "/repos/\{owner}/\{repo}/issues/\{number}/labels",
+    obj.to_json(),
+  )
 }
 
-///| Issue comment.
+///|
+/// Issue comment.
 pub struct Comment {
   id : Double
   body : String
   html_url : String
-} derive(Show, Eq, FromJson, ToJson)
+} derive(Debug, Eq, FromJson, ToJson)
 
-///| List comments on an issue.
+///|
+pub impl Show for Comment with fn output(self, logger) {
+  logger.write_string("{id: ")
+  logger.write_string(@debug.to_string(self.id))
+  logger.write_string(", body: ")
+  logger.write_string(@debug.to_string(self.body))
+  logger.write_string(", html_url: ")
+  logger.write_string(@debug.to_string(self.html_url))
+  logger.write_string("}")
+}
+
+///|
+/// List comments on an issue.
 pub async fn list_comments(
   client : @client.GitHubClient,
   owner : String,
@@ -102,7 +153,8 @@ pub async fn list_comments(
   @json.from_json(json)
 }
 
-///| Add a comment to an issue.
+///|
+/// Add a comment to an issue.
 pub async fn create_comment(
   client : @client.GitHubClient,
   owner : String,

@@ -1,0 +1,65 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/search"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn code(@client.GitHubClient, String, sort? : String, order? : String, per_page? : Int) -> CodeSearchResponse
+
+pub async fn issues(@client.GitHubClient, String, sort? : String, order? : String, per_page? : Int) -> IssueSearchResponse
+
+pub async fn repos(@client.GitHubClient, String, sort? : String, order? : String, per_page? : Int) -> RepoSearchResponse
+
+// Errors
+
+// Types and methods
+pub struct CodeSearchItem {
+  name : String
+  path : String
+  html_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for CodeSearchItem
+
+pub struct CodeSearchResponse {
+  total_count : Int
+  incomplete_results : Bool
+  items : Array[CodeSearchItem]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for CodeSearchResponse
+
+pub struct IssueSearchItem {
+  number : Int
+  title : String
+  state : String
+  html_url : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for IssueSearchItem
+
+pub struct IssueSearchResponse {
+  total_count : Int
+  incomplete_results : Bool
+  items : Array[IssueSearchItem]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for IssueSearchResponse
+
+pub struct RepoSearchItem {
+  full_name : String
+  html_url : String
+  stargazers_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for RepoSearchItem
+
+pub struct RepoSearchResponse {
+  total_count : Int
+  incomplete_results : Bool
+  items : Array[RepoSearchItem]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for RepoSearchResponse
+
+// Type aliases
+
+// Traits

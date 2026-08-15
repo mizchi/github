@@ -1,4 +1,5 @@
-///| GitHub REST API client.
+///|
+/// GitHub REST API client.
 pub struct GitHubClient {
   token : String
   base_url : String
@@ -7,14 +8,11 @@ pub struct GitHubClient {
 
 ///|
 pub fn GitHubClient::new(token : String, base_url? : String) -> GitHubClient {
-  {
-    token,
-    base_url: base_url.unwrap_or("https://api.github.com"),
-    conn: None,
-  }
+  { token, base_url: base_url.unwrap_or("https://api.github.com"), conn: None }
 }
 
-///| Create a fresh connection (closes existing one).
+///|
+/// Create a fresh connection (closes existing one).
 async fn GitHubClient::fresh_conn(self : GitHubClient) -> @http.Client {
   match self.conn {
     Some(c) => c.close()
@@ -38,21 +36,35 @@ fn base_headers(token : String) -> Map[String, String] {
   hdrs
 }
 
-///| Response with headers, for pagination/rate-limit inspection.
+///|
+/// Response with headers, for pagination/rate-limit inspection.
 pub struct ApiResponse {
   json : Json
   status : Int
   headers : Map[String, String]
-} derive(Show)
+}
 
-///| Check response and raise on error.
+///|
+pub impl Show for ApiResponse with fn output(self, logger) {
+  logger.write_string("{json: ")
+  logger.write_string(@debug.to_string(self.json))
+  logger.write_string(", status: ")
+  logger.write_string(self.status.to_string())
+  logger.write_string(", headers: ")
+  logger.write_string(@debug.to_string(self.headers))
+  logger.write_string("}")
+}
+
+///|
+/// Check response and raise on error.
 async fn GitHubClient::check(
   self : GitHubClient,
   conn : @http.Client,
   response : @http.Response,
 ) -> Unit {
   // Rate limit: 429 or 403 with retry-after
-  if response.code == 429 || (response.code == 403 && response.headers.contains("retry-after")) {
+  if response.code == 429 ||
+    (response.code == 403 && response.headers.contains("retry-after")) {
     let body = conn.read_all()
     self.conn = None
     raise RateLimitError(response.code, body.text())
@@ -64,7 +76,8 @@ async fn GitHubClient::check(
   }
 }
 
-///| GET → JSON
+///|
+/// GET → JSON
 pub async fn GitHubClient::get_json(self : GitHubClient, path : String) -> Json {
   let conn = self.fresh_conn()
   let response = conn.get(path)
@@ -72,7 +85,8 @@ pub async fn GitHubClient::get_json(self : GitHubClient, path : String) -> Json 
   conn.read_all().json()
 }
 
-///| GET → JSON with full response (headers for pagination/rate-limit).
+///|
+/// GET → JSON with full response (headers for pagination/rate-limit).
 pub async fn GitHubClient::get_response(
   self : GitHubClient,
   path : String,
@@ -84,7 +98,8 @@ pub async fn GitHubClient::get_response(
   { json, status: response.code, headers: response.headers }
 }
 
-///| GET → raw bytes (follows 302 redirects for artifact download).
+///|
+/// GET → raw bytes (follows 302 redirects for artifact download).
 pub async fn GitHubClient::get_binary(
   self : GitHubClient,
   path : String,
@@ -109,7 +124,8 @@ pub async fn GitHubClient::get_binary(
   conn.read_all().binary()
 }
 
-///| POST with JSON body → JSON response
+///|
+/// POST with JSON body → JSON response
 pub async fn GitHubClient::post_json(
   self : GitHubClient,
   path : String,
@@ -121,7 +137,8 @@ pub async fn GitHubClient::post_json(
   conn.read_all().json()
 }
 
-///| POST with raw bytes body → JSON response (for asset upload).
+///|
+/// POST with raw bytes body → JSON response (for asset upload).
 pub async fn GitHubClient::post_binary(
   self : GitHubClient,
   url : String,
@@ -137,7 +154,8 @@ pub async fn GitHubClient::post_binary(
   conn.read_all().json()
 }
 
-///| PATCH with JSON body → JSON response
+///|
+/// PATCH with JSON body → JSON response
 pub async fn GitHubClient::patch_json(
   self : GitHubClient,
   path : String,
@@ -151,11 +169,9 @@ pub async fn GitHubClient::patch_json(
   conn.read_all().json()
 }
 
-///| DELETE → status code (204 = success)
-pub async fn GitHubClient::delete(
-  self : GitHubClient,
-  path : String,
-) -> Int {
+///|
+/// DELETE → status code (204 = success)
+pub async fn GitHubClient::delete(self : GitHubClient, path : String) -> Int {
   let conn = self.fresh_conn()
   conn.request(@http.Delete, path)
   let response = conn.end_request()
@@ -164,7 +180,8 @@ pub async fn GitHubClient::delete(
   response.code
 }
 
-///| PUT with JSON body → JSON response
+///|
+/// PUT with JSON body → JSON response
 pub async fn GitHubClient::put_json(
   self : GitHubClient,
   path : String,
@@ -188,9 +205,29 @@ pub fn GitHubClient::close(self : GitHubClient) -> Unit {
 ///|
 pub suberror GitHubApiError {
   GitHubApiError(Int, String)
-} derive(Show, ToJson)
+} derive(ToJson)
+
+///|
+pub impl Show for GitHubApiError with fn output(self, logger) {
+  let GitHubApiError(code, msg) = self
+  logger.write_string("GitHubApiError(")
+  logger.write_string(code.to_string())
+  logger.write_string(", ")
+  logger.write_string(msg)
+  logger.write_string(")")
+}
 
 ///|
 pub suberror RateLimitError {
   RateLimitError(Int, String)
-} derive(Show, ToJson)
+} derive(ToJson)
+
+///|
+pub impl Show for RateLimitError with fn output(self, logger) {
+  let RateLimitError(code, msg) = self
+  logger.write_string("RateLimitError(")
+  logger.write_string(code.to_string())
+  logger.write_string(", ")
+  logger.write_string(msg)
+  logger.write_string(")")
+}

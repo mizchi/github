@@ -1,1 +1,5 @@
-import { "mizchi/github/client" }
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "mizchi/github/client",
+}

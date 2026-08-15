@@ -1,0 +1,49 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/client"
+
+import {
+  "moonbitlang/async/http",
+}
+
+// Values
+pub fn parse_next_link(Map[String, String]) -> String?
+
+// Errors
+pub suberror GitHubApiError {
+  GitHubApiError(Int, String)
+} derive(ToJson)
+pub impl Show for GitHubApiError
+
+pub suberror RateLimitError {
+  RateLimitError(Int, String)
+} derive(ToJson)
+pub impl Show for RateLimitError
+
+// Types and methods
+pub struct ApiResponse {
+  json : Json
+  status : Int
+  headers : Map[String, String]
+}
+pub impl Show for ApiResponse
+
+pub struct GitHubClient {
+  token : String
+  base_url : String
+  mut conn : @http.Client?
+}
+pub fn GitHubClient::close(Self) -> Unit
+pub async fn GitHubClient::delete(Self, String) -> Int
+pub async fn GitHubClient::get_all_pages(Self, String, (Json) -> Array[Json], max_pages? : Int) -> Array[Json]
+pub async fn GitHubClient::get_binary(Self, String) -> Bytes
+pub async fn GitHubClient::get_json(Self, String) -> Json
+pub async fn GitHubClient::get_response(Self, String) -> ApiResponse
+pub fn GitHubClient::new(String, base_url? : String) -> Self
+pub async fn GitHubClient::patch_json(Self, String, Json) -> Json
+pub async fn GitHubClient::post_binary(Self, String, Bytes, String) -> Json
+pub async fn GitHubClient::post_json(Self, String, Json) -> Json
+pub async fn GitHubClient::put_json(Self, String, Json) -> Json
+
+// Type aliases
+
+// Traits

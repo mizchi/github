@@ -1,4 +1,5 @@
-///| List workflow runs for a repository.
+///|
+/// List workflow runs for a repository.
 pub async fn list_workflow_runs(
   client : @client.GitHubClient,
   owner : String,
@@ -6,7 +7,7 @@ pub async fn list_workflow_runs(
   branch? : String,
   created? : String,
   per_page? : Int,
-) -> ListWorkflowRunsResponse raise {
+) -> ListWorkflowRunsResponse {
   let pp = per_page.unwrap_or(30)
   let mut path = "/repos/\{owner}/\{repo}/actions/runs?per_page=\{pp}"
   match branch {
@@ -21,20 +22,22 @@ pub async fn list_workflow_runs(
   @json.from_json(json)
 }
 
-///| List artifacts for a specific workflow run.
+///|
+/// List artifacts for a specific workflow run.
 pub async fn list_artifacts(
   client : @client.GitHubClient,
   owner : String,
   repo : String,
   run_id : Double,
-) -> ListArtifactsResponse raise {
+) -> ListArtifactsResponse {
   let id = run_id.to_int64()
   let path = "/repos/\{owner}/\{repo}/actions/runs/\{id}/artifacts"
   let json = client.get_json(path)
   @json.from_json(json)
 }
 
-///| Download an artifact as a ZIP archive (raw bytes).
+///|
+/// Download an artifact as a ZIP archive (raw bytes).
 pub async fn download_artifact(
   client : @client.GitHubClient,
   owner : String,

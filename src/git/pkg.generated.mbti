@@ -1,0 +1,54 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "mizchi/github/git"
+
+import {
+  "mizchi/github/client",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub async fn create_ref(@client.GitHubClient, String, String, String, String) -> Ref
+
+pub async fn delete_ref(@client.GitHubClient, String, String, String) -> Unit
+
+pub async fn get_commit(@client.GitHubClient, String, String, String) -> Commit
+
+pub async fn get_ref(@client.GitHubClient, String, String, String) -> Ref
+
+pub async fn get_tree(@client.GitHubClient, String, String, String, recursive? : Bool) -> Tree
+
+// Errors
+
+// Types and methods
+pub struct Commit {
+  sha : String
+  message : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Commit
+
+pub struct Ref {
+  ref_ : String
+  object_sha : String
+  object_type : String
+} derive(Eq, @debug.Debug)
+pub impl Show for Ref
+pub impl ToJson for Ref
+pub impl @json.FromJson for Ref
+
+pub struct Tree {
+  sha : String
+  tree : Array[TreeEntry]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for Tree
+
+pub struct TreeEntry {
+  path : String
+  mode : String
+  sha : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for TreeEntry
+
+// Type aliases
+
+// Traits
