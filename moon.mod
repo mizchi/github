@@ -1,10 +1,10 @@
 name = "mizchi/github"
 
-version = "0.1.4"
+version = "0.1.5"
 
 import {
-  "moonbitlang/x@0.4.50",
-  "moonbitlang/async@0.20.5",
+  "moonbitlang/x@0.5.5",
+  "moonbitlang/async@0.22.4",
 }
 
 readme = "README.md"

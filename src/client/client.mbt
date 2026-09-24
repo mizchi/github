@@ -8,7 +8,7 @@ pub struct GitHubClient {
 
 ///|
 pub fn GitHubClient::new(token : String, base_url? : String) -> GitHubClient {
-  { token, base_url: base_url.unwrap_or("https://api.github.com"), conn: None }
+  { token, base_url: base_url.unwrap_or("https://api.github.com"), conn: None, }
 }
 
 ///|
@@ -24,8 +24,8 @@ async fn GitHubClient::fresh_conn(self : GitHubClient) -> @http.Client {
 }
 
 ///|
-fn base_headers(token : String) -> Map[String, String] {
-  let hdrs : Map[String, String] = {
+fn base_headers(token : String) -> Map[@http.CaseInsensitiveString, String] {
+  let hdrs : Map[@http.CaseInsensitiveString, String] = {
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "mizchi-github-mbt/0.1.0",
@@ -95,7 +95,11 @@ pub async fn GitHubClient::get_response(
   let response = conn.get(path)
   self.check(conn, response)
   let json = conn.read_all().json()
-  { json, status: response.code, headers: response.headers }
+  let headers : Map[String, String] = Map::new()
+  for k, v in response.headers {
+    headers.set(k.to_string(), v)
+  }
+  { json, status: response.code, headers, }
 }
 
 ///|
@@ -110,7 +114,7 @@ pub async fn GitHubClient::get_binary(
   if response.code == 302 {
     match response.headers.get("location") {
       Some(url) => {
-        conn.skip_response_body()
+        ignore(conn.read_all())
         let (resp, body) = @http.get(url)
         guard resp.code >= 200 && resp.code < 300 else {
           raise GitHubApiError(resp.code, "redirect failed")
@@ -146,7 +150,9 @@ pub async fn GitHubClient::post_binary(
   content_type : String,
 ) -> Json {
   let conn = self.fresh_conn()
-  let hdrs : Map[String, String] = { "Content-Type": content_type }
+  let hdrs : Map[@http.CaseInsensitiveString, String] = {
+    "Content-Type": content_type,
+  }
   conn.request(@http.Post, url, extra_headers=hdrs)
   conn.write(data)
   let response = conn.end_request()
@@ -176,7 +182,7 @@ pub async fn GitHubClient::delete(self : GitHubClient, path : String) -> Int {
   conn.request(@http.Delete, path)
   let response = conn.end_request()
   self.check(conn, response)
-  conn.skip_response_body()
+  ignore(conn.read_all())
   response.code
 }
 
