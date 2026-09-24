@@ -38,7 +38,7 @@ pub impl @json.FromJson for Ref with fn from_json(json, path) {
     Some(Json::String(s)) => s
     _ => raise @json.JsonDecodeError((path, "missing type"))
   }
-  { ref_, object_sha, object_type }
+  { ref_, object_sha, object_type, }
 }
 
 ///|
